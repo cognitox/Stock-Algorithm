@@ -1,1 +1,11 @@
 This is a read me file for setup
+
+This file will not only handle all configuration setings set in config/config.xml,
+it will also, handle The initial loading of the minimum amount of program data needed
+to run.
+
+This will also setup entire databases, based off of the database configuration files,
+to promote loose couplings, the methods used to setup the database, will come from
+models.database.api_adapters, in the case that we will need to insert into a different
+database in the future.
+ 

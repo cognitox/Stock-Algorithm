@@ -1,0 +1,9 @@
+This is a read me file for api_adapters
+
+api_adapters is supposed to promote loose couplings between 
+the way the databases that we use and the methods from database that are implemented
+because of this abstraction, different databases will be able to be used set per the 
+database configuration file [ database_config.xml ],
+
+todo :// need to come up with a way to further promote loose couplings between the way
+the database is created and parsed.

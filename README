@@ -1,0 +1,7 @@
+DATABASE LAYER:
+
+The database layer will be driven by the setup module, wich inturn will contact the models.database.database Database
+class, which will use api_adaptors, per the specific database, chosen be the config, database, database_config.xml file
+which will point to the proper xml, schema files,
+
+We will also need a one to one, object relational mapper, such as SQLAlchemy 

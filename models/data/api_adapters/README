@@ -1,2 +1,6 @@
-
 This is a read me file for api_adapters
+
+api_adapters is supposed to promote loose couplings between 
+the way the data is obtained, and the functionality in place to present the data
+to the business logic layer, this functionality is supposed to create an interface
+like change out if the source is no longer presenting the correct information.

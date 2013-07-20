@@ -1,1 +1,8 @@
-This is a readme file for data
+This is a read me file for data
+
+data.py is supposed to uses the api_adapters, to obtain the correct information to 
+pass to the strategy logic layer, the Data class, will have fall through's with various
+methods of obtaining the correct information needed such that the program will not 
+come to a hard stop if the proper information is not obtained. If the proper information
+cannot be presented, there will be configurable logic put into place that will allow for
+graceful degredation.

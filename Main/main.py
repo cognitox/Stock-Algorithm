@@ -1,6 +1,7 @@
 #uses the xml scripts and the log_database_files
 from z_setup.setup import Setup
 #data tools
+from models.models import Models
 from models.data.data import Data
 from models.data.api_adapters.google_finance import GoogleFinance
 from models.data.api_adapters.scrapers import Scrapers
@@ -23,6 +24,9 @@ Strategy()
 # Logic
 Logic()
 MachineLearning()
+
+
+Models()
 # => data
 Data()
 # => Data Tools

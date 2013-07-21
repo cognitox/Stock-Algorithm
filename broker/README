@@ -1,1 +1,5 @@
 This is a read me file for broker
+The broker handles all of the buying and selling logic, 
+through the first chunk of development, we will make sure
+that if a stock is currently active, and open and paid for that 
+we will not allow another consecutive buy of that stock.

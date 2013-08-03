@@ -16,6 +16,18 @@
     		[ant analysis](creates analytics from all previous builds)
     	</echo>
     </target>		
+	
+	<!--
+		Need to add a way to delete the build folder, 
+		to copy entire project to a backup folder, 
+		to manage databases in an automated way, 
+		to push the html analytics to a seperate repository, 
+		and have that build into a ruby project
+		and automate emails for everyone on the build list...
+	-->
+	
+	
+	
 	<!-- needs to pull, if other developers are using this repository! -->
 	<!-- currently doesn't pull anything-->
     <target name="commit">

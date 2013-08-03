@@ -267,18 +267,7 @@
 		<!-- templating example http://www.javalobby.org/articles/ant-preprocessor/ -->
 	</target>
 	
-	<!--<target name="compile" depends="create_html_output">-->	
-	<target name="compile" depends="create_files">	
-		<!-- before these commands will work, you need to set a trusted ssh key and upload it to github -->
-		
-		<!-- to generate a key ... do this... [ssh-keygen -t rsa -C "your_email_address@example.com"] 
-		     do not ovveride an existing one, cause it will jackup any other connections you have....-->
-		
-		<!-- once that is complete run this command [clip < ~/.ssh/id_rsa.pub] to copy it to your clipboard... -->
-		
-		<!-- go to your account on github, - account settings - ssh keys ... add a key -->
-		
-		<!-- try catch is specific to ant-contrib [http://ant-contrib.sourceforge.net/tasks/tasks/] -->
+	<target name="git-add-all-modified-files">
 		<trycatch>
 			<try>
 				<git command="add">	
@@ -291,33 +280,57 @@
 				<echo>git [add -A] failed</echo>	
 			</catch>
 		</trycatch>
+	</target>
+	
+	<target name="git-commit-changes" depends="git-add-all-modified-files">
 		<trycatch>
-		<try>
-			<git command="commit">
-				<args>
-					<arg value="-m" />
-					<arg value="'BUILD NO. [@{time.stamp}]'" />
-				</args>
-			</git>
-		</try>
-		<catch>
-			<echo>git [commit -m] failed</echo>	
-		</catch>
+			<try>
+				<git command="commit">
+					<args>
+						<arg value="-m" />
+						<arg value="'BUILD NO. [@{time.stamp}]'" />
+					</args>
+				</git>
+			</try>
+			<catch>
+				<echo>git [commit -m] failed</echo>	
+			</catch>
 		</trycatch>
+	</target>
+	
+	<target name="git-push-to-origin" depends="git-commit-changes">
 		<trycatch>
-		<try>
-			<git command="push">
-				<args>
-					<arg value="origin" />
-					<arg value="master" />
-				</args>
-			</git>
-		</try>
-		<catch>
-			<echo>git [push origin master] failed</echo>	
-		</catch>
+			<try>
+				<git command="push">
+					<args>
+						<arg value="origin" />
+						<arg value="master" />
+					</args>
+				</git>
+			</try>
+			<catch>
+				<echo>git [push origin master] failed</echo>	
+			</catch>
 		</trycatch>
-		<!--<git command="commit -a -allow-empty-message -m ''" /> note* allow-empty message needs two mid lines(-)*-->
+	</target>
+	
+	
+	
+	<!--<target name="compile" depends="create_html_output">-->	
+	<!--<target name="compile" depends="create_files">-->
+	<target name="compile" depends="git-push-to-origin">
+			
+		<!-- before these commands will work, you need to set a trusted ssh key and upload it to github -->
+		
+		<!-- to generate a key ... do this... [ssh-keygen -t rsa -C "your_email_address@example.com"] 
+		     do not ovveride an existing one, cause it will jackup any other connections you have....-->
+		
+		<!-- once that is complete run this command [clip < ~/.ssh/id_rsa.pub] to copy it to your clipboard... -->
+		
+		<!-- go to your account on github, - account settings - ssh keys ... add a key -->
+		
+		<!-- try catch is specific to ant-contrib [http://ant-contrib.sourceforge.net/tasks/tasks/] -->
+				<!--<git command="commit -a -allow-empty-message -m ''" /> note* allow-empty message needs two mid lines(-)*-->
 				
 		<!--<py-compile dir="${src.dir}" pythonpath="${src.dir}" optimize="0"/>-->
 			

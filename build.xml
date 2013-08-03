@@ -3,6 +3,9 @@
 <project name="Strategy" default="compile">
 	<!-- references .jar to compile python code -->
 	<taskdef resource="pyAntTasks.properties"/>
+	<!-- allows for antcontrib references (like try catch...)-->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+		
 	<!-- utilities -->
 	
 	
@@ -19,9 +22,61 @@
 		<tstamp>
 			<format property="time.stamp" pattern="[MM][dd][yyyy][hh][mm][ss][aa]" />
 		</tstamp>
-		
-		
 	
+		<!-- ############################################### -->
+		<!-- ############################################### -->
+		<!-- ##                                           ## -->
+		<!-- ##                  Git Commands             ## -->
+		<!-- ##      Allows for pull/push/clone for git   ## -->		
+		<!-- ##      repositories                         ## -->
+		<!-- ##                                           ## -->
+		<!-- ############################################### -->
+		<!-- ############################################### -->
+	
+			<!-- git commands -->
+			<macrodef name="git">
+				<attribute name="command" />
+				<attribute name="dir" default="" />
+				<element name="args" optional="true" />
+				<sequential>
+					<echo message="git @{command}" />
+					<exec executable="git" dir="@{dir}">
+						<arg value="@{command}"/>
+						<args/>
+					</exec>
+				</sequential>
+			</macrodef>
+			
+			<macrodef name="git-clone-pull">
+				<attribute name="repository" />
+				<attribute name="dest" />
+				<sequential>
+					<git command="clone">
+						<args>
+							<arg value="@{repository}" />
+							<arg value="@{dest}" />
+						</args>
+					</git>
+					<git command="pull" dir="@{dest}" />
+				</sequential>
+			</macrodef>
+	
+	<!-- reference this url [tlrobinson.net/blog/2008/11/ant-tasks-for-git]-->
+	
+	<!--
+	<git command="clone">
+		<args>
+			<arg value="git://github.com/reponame.git" />
+			<arg value="reponame" />
+		</args>
+	</git>
+	-->
+	
+	<!--
+	<git command="pull" dir="repository_path" />
+	-->
+	
+		<!-- end // git commands -->
 	
 	
 	<!-- end // utilities -->
@@ -61,9 +116,13 @@
 					<!-- files system -->
 	
 						<!-- targets executed -->
-							<property name="target.log.file" value="${build.dir}/targets_executed.txt"/>	
+								<property name="target.log.file" value="${build.dir}/targets_executed.txt"/>	
 						<!-- end // targets executed -->
 						
+						<!-- targets executed -->
+								<property name="error.log.file" value="${build.dir}/errors.txt"/>	
+						<!-- end // targets executed -->
+							
 						<!-- sub directories -->	
 						
 							<!-- tests -->
@@ -155,6 +214,9 @@
 					<!-- logs all the targets executed per build -->
 					<touch file="${target.log.file}" datetime="now"/>
 					
+					<!-- logs all the errors -->
+					<touch file="${error.log.file}" datetime="now"/>
+		
 						<!-- test.dir -->
 								<!-- logs all the targets executed per build -->
 								<touch file="${target.log.file}" datetime="now"/>
@@ -177,12 +239,88 @@
 	
 	
 	
+	<!-- ############################################### -->
+	<!-- ############################################### -->
+	<!-- ##                                           ## -->
+	<!-- ##  Write the all build metrics out to an    ## -->
+	<!-- ##  html file                                ## -->
+	<!-- ##                                           ## -->	
+	<!-- ############################################### -->
+	<!-- ############################################### -->
 	
 	
+	<target name="create_html_output" depends="create_file_system">
+		<echo file="${html.log.file}" append="false" message="
+			&lt;html&gt;
+				&lt;head&gt;
+				&lt;/head&gt;
+				&lt;body&gt;
+		" />
+		<echo file="${html.log.file}" append="true" message="
+				&lt;h1&gt;Testing Testing 123&lt;/h1&gt;
+		" />
+		<echo file="${html.log.file}" append="true" message="
+			&lt;/body&gt;
+			&lt;/html&gt;
+		" />
+
+		<!-- templating example http://www.javalobby.org/articles/ant-preprocessor/ -->
+	</target>
 	
-	
+	<!--<target name="compile" depends="create_html_output">-->	
 	<target name="compile" depends="create_files">	
+		<!-- before these commands will work, you need to set a trusted ssh key and upload it to github -->
+		
+		<!-- to generate a key ... do this... [ssh-keygen -t rsa -C "your_email_address@example.com"] 
+		     do not ovveride an existing one, cause it will jackup any other connections you have....-->
+		
+		<!-- once that is complete run this command [clip < ~/.ssh/id_rsa.pub] to copy it to your clipboard... -->
+		
+		<!-- go to your account on github, - account settings - ssh keys ... add a key -->
+		
+		<!-- try catch is specific to ant-contrib [http://ant-contrib.sourceforge.net/tasks/tasks/] -->
+		<trycatch>
+			<try>
+				<git command="add">	
+					<args>
+						<arg value="-A" />
+					</args>
+				</git>
+			</try>
+			<catch>
+				<echo>git [add -A] failed</echo>	
+			</catch>
+		</trycatch>
+		<trycatch>
+		<try>
+			<git command="commit">
+				<args>
+					<arg value="-m" />
+					<arg value="'BUILD NO. [@{time.stamp}]'" />
+				</args>
+			</git>
+		</try>
+		<catch>
+			<echo>git [commit -m] failed</echo>	
+		</catch>
+		</trycatch>
+		<trycatch>
+		<try>
+			<git command="push">
+				<args>
+					<arg value="origin" />
+					<arg value="master" />
+				</args>
+			</git>
+		</try>
+		<catch>
+			<echo>git [push origin master] failed</echo>	
+		</catch>
+		</trycatch>
+		<!--<git command="commit -a -allow-empty-message -m ''" /> note* allow-empty message needs two mid lines(-)*-->
+				
 		<!--<py-compile dir="${src.dir}" pythonpath="${src.dir}" optimize="0"/>-->
+			
 	</target>
 
 </project>

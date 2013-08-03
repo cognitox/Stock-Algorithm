@@ -1,0 +1,188 @@
+
+
+<project name="Strategy" default="compile">
+	<!-- references .jar to compile python code -->
+	<taskdef resource="pyAntTasks.properties"/>
+	<!-- utilities -->
+	
+	
+	<!-- ############################################### -->
+	<!-- ############################################### -->
+	<!-- ##                                           ## -->
+	<!-- ##                  Utilities                ## -->
+	<!-- ##  (helper properties and functionality)    ## -->		
+	<!-- ##                                           ## -->
+	<!-- ############################################### -->
+	<!-- ############################################### -->
+	
+		<!-- time stamp -->
+		<tstamp>
+			<format property="time.stamp" pattern="[MM][dd][yyyy][hh][mm][ss][aa]" />
+		</tstamp>
+		
+		
+	
+	
+	
+	<!-- end // utilities -->
+	
+	<!-- ############################################### -->
+	<!-- ############################################### -->
+	<!-- ##                                           ## -->
+	<!-- ##        Logs and logging filesystem        ## -->
+	<!-- ##  (provides the file structure needed to   ## -->
+	<!-- ##   maintain the logging and output)        ## -->
+	<!-- ##                                           ## -->		
+	<!-- ############################################### -->
+	<!-- ############################################### -->
+	
+	
+	<!-- logs -->
+	
+		<!-- directory -->
+		<property name="log.dir" value="build_logs"/>
+			
+			<!-- files -->				
+	
+				<!-- build logs -->
+						<property name="build.log.file" value="${log.dir}/tests_executed.txt"/>
+					<!-- end // build logs -->
+				<!-- global repository logs -->
+						<property name="global.repository.log.file" value="${log.dir}/repository_transactions.txt"/>
+				<!-- end // build logs -->
+
+			<!-- end // files -->
+			
+			<!-- sub directories -->
+				
+				<!-- build specific (creates this individually for each build) -->	
+					<property name="build.dir" value="${log.dir}/build_${time.stamp}" />
+					
+					<!-- files system -->
+	
+						<!-- targets executed -->
+							<property name="target.log.file" value="${build.dir}/targets_executed.txt"/>	
+						<!-- end // targets executed -->
+						
+						<!-- sub directories -->	
+						
+							<!-- tests -->
+							<property name="test.dir" value="${build.dir}/tests"/>
+								<!-- files -->				
+									<!-- tests executed & results -->
+										<property name="test.log.file" value="${test.dir}/test_transactions.txt"/>
+									<!-- end // tests executed & results -->
+								<!-- end // files -->
+							<!-- end // tests -->
+				
+							<!-- repository -->
+							<property name="repository.dir" value="${build.dir}/repository"/>
+								<!-- files -->				
+									<!-- repository transactions -->
+										<property name="repository.log.file" value="${repository.dir}/repository_transactions.txt"/>
+									<!-- end // repository transactions -->
+								<!-- end // files -->
+							<!-- end // repository -->
+	
+							<!-- html -->
+							<property name="html.dir" value="${build.dir}/html"/>
+								<!-- files -->				
+									<!-- html output -->
+										<property name="html.log.file" value="${html.dir}/html_output.html"/>
+									<!-- end // html output  -->
+								<!-- end // files -->	
+							<!-- end // html -->
+	
+						<!-- end // sub directories -->	
+							
+					<!-- end // files system -->
+	
+				<!-- end // build specific (creates this individually for each build) -->	
+			
+			<!-- end // sub directories -->
+		
+		<!-- end // directory -->
+	
+	<!-- end // log -->
+	
+	<!-- ############################################### -->
+	<!-- ############################################### -->
+	<!-- ##  Uses the file system variables above     ## -->
+	<!-- ##  And creates the necessary structure      ## -->
+	<!-- ##  to execute and log actions for automated ## -->
+	<!-- ##  builds                                   ## -->	
+	<!-- ############################################### -->
+	<!-- ############################################### -->
+	
+	
+	<target name="create_file_system">
+		<!-- creates all directories necessary for file system -->
+		
+		<!-- base directory to hold all tests -->
+		
+		<mkdir dir="${log.dir}" />
+			
+			<!-- holds individual builds -->
+			
+			<mkdir dir="${build.dir}" />
+			
+			<!-- metrics being measured will be output to 
+					 the following directories-->
+				
+				<mkdir dir="${test.dir}" />
+				
+				<mkdir dir="${repository.dir}" />
+				
+				<mkdir dir="${html.dir}" />
+	</target>
+	
+	<!-- This will only execute once the create_file_system 
+		 target has been executed and verified -->
+	
+	<target name="create_files" depends="create_file_system">
+		
+		<!-- creates all individual files within file structure -->
+		
+		<!-- log.dir -->
+			
+			<!-- logs all builds -->
+			<touch file="${build.log.file}" datetime="now"/>
+			
+			<!-- logs all repository transactions -->
+			<touch file="${global.repository.log.file}" datetime="now"/>
+		
+				<!-- build.dir -->
+					<!-- logs all the targets executed per build -->
+					<touch file="${target.log.file}" datetime="now"/>
+					
+						<!-- test.dir -->
+								<!-- logs all the targets executed per build -->
+								<touch file="${target.log.file}" datetime="now"/>
+						<!-- end // test.dir -->
+						
+						<!-- repository.dir -->
+								<!-- logs all the targets executed per build -->
+								<touch file="${repository.log.file}" datetime="now"/>
+						<!-- end // repository.dir -->
+						
+						<!-- html.dir -->
+								<!-- logs all the targets executed per build -->
+								<touch file="${html.log.file}" datetime="now"/>
+						<!-- end // html.dir -->
+		
+				<!-- end // build.dir -->
+		<!-- end // log.dir -->
+	</target>
+	
+	
+	
+	
+	
+	
+	
+	
+	<target name="compile" depends="create_files">	
+		<!--<py-compile dir="${src.dir}" pythonpath="${src.dir}" optimize="0"/>-->
+	</target>
+
+</project>

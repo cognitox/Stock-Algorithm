@@ -4,4 +4,25 @@ The database layer will be driven by the setup module, wich inturn will contact 
 class, which will use api_adaptors, per the specific database, chosen be the config, database, database_config.xml file
 which will point to the proper xml, schema files,
 
-We will also need a one to one, object relational mapper, such as SQLAlchemy 
+We will also need a one to one, object relational mapper, such as SQLAlchemy
+
+
+
+ #Setting properties
+
+#
+# What is the goal out of using ant to automate my python development
+# 1) I want to automate all my tests, without having to manually run them
+
+# 2) I want to push this to a repository, without having to manually use git...
+
+# 3) I want to view my tests online, and view my stocks real-time via website
+#    Will use a github repository, and heroku, to create real time reports,
+
+# 4) I also would like to document my framework, and ideas in reference to 
+#    This project and how 
+
+# 5) This is also going to have to transfer DB stuff, from development sqlite
+#    To a more so trusted database source, and there should probabaly be a git 
+#    Ignore file somewhere in here, to no push up the enviornment variable settings
+ 

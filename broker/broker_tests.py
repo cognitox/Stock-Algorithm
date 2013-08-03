@@ -107,10 +107,6 @@ class Test(unittest.TestCase):
         numberOfShares = 100
         self.Broker.BuyStockByTickerSymbolAndNumberOfShares(tickerSymbol, numberOfShares)    
         
-        tickerSymbol = '⌘ ⌛ ☘'
-        numberOfShares = 100
-        self.Broker.BuyStockByTickerSymbolAndNumberOfShares(tickerSymbol, numberOfShares)    
-        
         tickerSymbol = '12345'
         numberOfShares = 100
         self.Broker.BuyStockByTickerSymbolAndNumberOfShares(tickerSymbol, numberOfShares)    
@@ -141,9 +137,9 @@ class Test(unittest.TestCase):
         
         
         
+    
     '''
     Testing Private Methods
-    '''
         
         
         
@@ -152,7 +148,7 @@ class Test(unittest.TestCase):
         
         
         
-        '''
+
     def BuyAShareOfStock(self):
         
         
@@ -169,7 +165,7 @@ class Test(unittest.TestCase):
         self.Broker._SellStockByTickerSymbolAndAmountOfSharesAndVerifyIndividualShareBid(tickerSymbol, numberOfShares, individualShareAsk, individualShareActualPricePaid, individualShareBid)
         
         pass
-        '''
+    '''
 
 
 

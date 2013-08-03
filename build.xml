@@ -1,13 +1,56 @@
+<project name="Strategy" default="display.commands">
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: Shows All Commands                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="display.commands">
+    	<echo>
+    		Menu :
+    		--------------------------
+    		ant commands : 
+    		--------------------------
+    		[ant commit]
+    		[ant tests]
+    		[ant origin]
+    		[ant test-and-push]
+    		[ant analysis]
+    	</echo>
+    </target>		
+	<!-- needs to pull, if other developers are using this repository! -->
+	<!-- currently doesn't pull anything-->
+    <target name="commit">
+    	<antcall target="git-commit-changes" />    	
+	</target>
+    <target name="tests">
+    	 <antcall target="create_file_system" />
+    	 <antcall target="run.all.tests" />	
+	</target>
+	<target name="origin">
+	    	 <antcall target="git-push-to-origin" />
+	</target>
+	<target name="test-and-push">
+   	 	<antcall target="create_file_system" />
+   	 	<antcall target="run.all.tests" />
+   	    <antcall target="git-push-to-origin" />
+		<antcall target="create_html_output" />
+	</target>
+	<!-- will only analyze existing builds... -->
+	<target name="analysis">
+		<antcall target="create_html_output" />
+	</target>
 
-
-<project name="Strategy" default="compile">
+	
+	
+	
+	
+	
 	<!-- references .jar to compile python code -->
 	<taskdef resource="pyAntTasks.properties"/>
 	<!-- allows for antcontrib references (like try catch...)-->
+	<!-- [http://ant-contrib.sourceforge.net/tasks/tasks/] -->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 		
 	<!-- utilities -->
-	
 	
 	<!-- ############################################### -->
 	<!-- ############################################### -->
@@ -32,7 +75,25 @@
 		<!-- ##                                           ## -->
 		<!-- ############################################### -->
 		<!-- ############################################### -->
-	
+		<!-- 
+		Before these commands will work, you need to set a
+		trusted ssh key and upload it to github.
+		 
+		To generate a key ... [ssh-keygen -t rsa -C 
+		"your_email_address@example.com"] do not ovveride 
+		an existing one, cause it will jackup any other 
+		connections you have.... once that is complete 
+		copy go to your account on github, - account 
+		settings - ssh keys ... add a key.
+		
+		Also the prerequisites for this is you must have an
+		git remote set for origin, and you need to specify
+		the ssh version of the git url, to bypass password 
+		authentication.
+		-->
+		
+		<!-- reference this url [tlrobinson.net/blog/2008/11/ant-tasks-for-git]-->
+				
 			<!-- git commands -->
 			<macrodef name="git">
 				<attribute name="command" />
@@ -60,22 +121,80 @@
 					<git command="pull" dir="@{dest}" />
 				</sequential>
 			</macrodef>
+			
+			<!-- ############################################### -->
+			<!-- ############################################### -->
+			<!-- ##                                           ## -->
+			<!-- ## Adds all files changes in this repository ## -->
+			<!-- ##                                           ## -->
+			<!-- ############################################### -->
+			<!-- ############################################### -->
+			
+				<target name="git-add-all-modified-files">
+					<trycatch>
+						<try>
+							<git command="add">	
+								<args>
+									<arg value="-A" />
+								</args>
+							</git>
+						</try>
+						<catch>
+							<echo>git [add -A] failed</echo>	
+						</catch>
+					</trycatch>
+				</target>
+			
+			<!-- ############################################### -->
+			<!-- ############################################### -->
+			<!-- ##                                           ## -->
+			<!-- ## Commits changes for modified files added  ## -->
+			<!-- ##                                           ## -->
+			<!-- ############################################### -->
+			<!-- ############################################### -->
+			
+				<target name="git-commit-changes" depends="git-add-all-modified-files">
+					<trycatch>
+						<try>
+							<git command="commit">
+								<args>
+									<arg value="-m" />
+									<arg value="'BUILD NO. [@{time.stamp}]'" />
+								</args>
+							</git>
+						</try>
+						<catch>
+							<echo>git [commit -m] failed</echo>	
+						</catch>
+					</trycatch>
+				</target>
+			
+			<!-- ############################################### -->
+			<!-- ############################################### -->
+			<!-- ##                                           ## -->
+			<!-- ## Pushes to the origin repository           ## -->
+			<!-- ##                                           ## -->
+			<!-- ############################################### -->
+			<!-- ############################################### -->
+			
+				<target name="git-push-to-origin" depends="git-commit-changes">
+					<trycatch>
+						<try>
+							<git command="push">
+								<args>
+									<arg value="origin" />
+									<arg value="master" />
+								</args>
+							</git>
+						</try>
+						<catch>
+							<echo>git [push origin master] failed</echo>	
+						</catch>
+					</trycatch>
+				</target>
 	
-	<!-- reference this url [tlrobinson.net/blog/2008/11/ant-tasks-for-git]-->
-	
-	<!--
-	<git command="clone">
-		<args>
-			<arg value="git://github.com/reponame.git" />
-			<arg value="reponame" />
-		</args>
-	</git>
-	-->
-	
-	<!--
-	<git command="pull" dir="repository_path" />
-	-->
-	
+				<!-- Other Commands : <git command="clone"><args><arg value="git://github.com/reponame.git" /><arg value="reponame" /></args></git><git command="pull" dir="repository_path" />-->
+						
 		<!-- end // git commands -->
 	
 	
@@ -248,8 +367,8 @@
 	<!-- ############################################### -->
 	<!-- ############################################### -->
 	
-	
-	<target name="create_html_output" depends="create_file_system">
+	<!-- templating example http://www.javalobby.org/articles/ant-preprocessor/ -->
+	<target name="create_html_output">
 		<echo file="${html.log.file}" append="false" message="
 			&lt;html&gt;
 				&lt;head&gt;
@@ -263,77 +382,65 @@
 			&lt;/body&gt;
 			&lt;/html&gt;
 		" />
-
-		<!-- templating example http://www.javalobby.org/articles/ant-preprocessor/ -->
 	</target>
-	
-	<target name="git-add-all-modified-files">
-		<trycatch>
-			<try>
-				<git command="add">	
-					<args>
-						<arg value="-A" />
-					</args>
-				</git>
-			</try>
-			<catch>
-				<echo>git [add -A] failed</echo>	
-			</catch>
-		</trycatch>
-	</target>
-	
-	<target name="git-commit-changes" depends="git-add-all-modified-files">
-		<trycatch>
-			<try>
-				<git command="commit">
-					<args>
-						<arg value="-m" />
-						<arg value="'BUILD NO. [@{time.stamp}]'" />
-					</args>
-				</git>
-			</try>
-			<catch>
-				<echo>git [commit -m] failed</echo>	
-			</catch>
-		</trycatch>
-	</target>
-	
-	<target name="git-push-to-origin" depends="git-commit-changes">
-		<trycatch>
-			<try>
-				<git command="push">
-					<args>
-						<arg value="origin" />
-						<arg value="master" />
-					</args>
-				</git>
-			</try>
-			<catch>
-				<echo>git [push origin master] failed</echo>	
-			</catch>
-		</trycatch>
-	</target>
-	
-	
 	
 	<!--<target name="compile" depends="create_html_output">-->	
 	<!--<target name="compile" depends="create_files">-->
-	<target name="compile" depends="git-push-to-origin">
-			
-		<!-- before these commands will work, you need to set a trusted ssh key and upload it to github -->
-		
-		<!-- to generate a key ... do this... [ssh-keygen -t rsa -C "your_email_address@example.com"] 
-		     do not ovveride an existing one, cause it will jackup any other connections you have....-->
-		
-		<!-- once that is complete run this command [clip < ~/.ssh/id_rsa.pub] to copy it to your clipboard... -->
-		
-		<!-- go to your account on github, - account settings - ssh keys ... add a key -->
-		
-		<!-- try catch is specific to ant-contrib [http://ant-contrib.sourceforge.net/tasks/tasks/] -->
-				<!--<git command="commit -a -allow-empty-message -m ''" /> note* allow-empty message needs two mid lines(-)*-->
-				
-		<!--<py-compile dir="${src.dir}" pythonpath="${src.dir}" optimize="0"/>-->
-			
+	<!--<target name="compile" depends="git-push-to-origin">-->
+	
+	
+	<!-- system directories -->	
+	
+	<property name="src.dir" value="."/>
+	<property name="broker.dir" value="${src.dir}/broker"/>		
+	<property name="broker.logic.dir" value="${broker.dir}/logic"/>
+	<property name="integration_testing.dir" value="${src.dir}/integration_testing"/>
+	<property name="main.dir" value="${src.dir}/Main"/>
+	<property name="models.dir" value="${src.dir}/models"/>
+	<property name="models.analyze.dir" value="${models.dir}/analyze"/>
+	<property name="models.data.dir" value="${models.dir}/data"/>
+	<property name="models.data.api_adapters.dir" value="${models.data.dir}/api_adapters"/>
+	<property name="models.database.dir" value="${models.dir}/database"/>
+	<property name="models.database.api_adapters.dir" value="${models.database.dir}/api_adapters"/>
+	<property name="models.utility.dir" value="${models.dir}/utility"/>
+	<property name="strategy.dir" value="${src.dir}/strategy"/>		
+	<property name="strategy.logic.dir" value="${strategy.dir}/logic"/>
+	<property name="z_setup.dir" value="${src.dir}/z_setup"/>		
+	<property name="optimize.setting" value="0"/>
+					
+	<target name="compile">
+		<!--<py-compile dir="${broker.logic}" pythonpath="." optimize="0"/>-->
+		<!--
+		<py-run script="broker/logic/logic_tests.py" pythonpath="${src.dir}" optimize="${optimize.setting}" />
+		<py-run script="broker/broker_tests.py" pythonpath="${src.dir}" optimize="${optimize.setting}" />	      	
+		<py-run script="broker/broker_tests.py" pythonpath="${src.dir}" optimize="${optimize.setting}" />
+		-->
+		<!--
+		<foreach target="individual.test" param="individual.test.file">
+	       <fileset id="test.files" dir="${src.dir}">
+	            <include name="**/*tests*" />
+	       </fileset>
+		</foreach>
+		-->
+		<!--
+		prints out everything in a file set to the screen
+		<echo message="My build-path is ${toString:test.files}" />	
+		-->
 	</target>
 
+	<target name="run.all.tests" depends="compile">
+		
+		<foreach target="individual.test" param="individual.test.file">
+	       <fileset id="test.files" dir="${src.dir}">
+	            <include name="**/*tests*" />
+	       </fileset>
+		</foreach>
+		
+	</target>
+	<target name="individual.test">
+		<record name="log.txt" action="start"/>  	
+			<py-run script="${individual.test.file}" pythonpath="${src.dir}" optimize="${optimize.setting}" />
+		<record name="log.txt" action="stop"/>
+	</target>
+	
 </project>

@@ -9,11 +9,11 @@
     		--------------------------
     		ant commands : 
     		--------------------------
-    		[ant commit]
-    		[ant tests]
-    		[ant origin]
-    		[ant test-and-push]
-    		[ant analysis]
+    		[ant commit] (adds all files to repository, and commits them)
+    		[ant tests] (executes all files with the naming convention tests)
+    		[ant origin] (adds all files, commit's all files, pushes to the origin master )
+    		[ant test-and-push](tests all files, adds all untract files, and pushes to the origin, creates analytics from previous builds)
+    		[ant analysis](creates analytics from all previous builds)
     	</echo>
     </target>		
 	<!-- needs to pull, if other developers are using this repository! -->

@@ -1,7 +1,0 @@
-pythonpath: /home/justin/Desktop/Stocks/Strategy
-   [py-run] Running data tests
-   [py-run] .
-   [py-run] ----------------------------------------------------------------------
-   [py-run] Ran 1 test in 0.000s
-   [py-run] 
-   [py-run] OK

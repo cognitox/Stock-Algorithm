@@ -1,8 +1,18 @@
 <project name="Strategy" default="display.commands">
 	
-	<!-- - - - - - - - - - - - - - - - - - 
-          target: Shows All Commands                      
-         - - - - - - - - - - - - - - - - - -->
+	
+	
+	
+	
+	
+	<!-- ############################################### -->
+	<!-- ############################################### -->
+	<!-- ##                                           ## -->
+	<!-- ##             Main Menu Options             ## -->
+	<!-- ##                                           ## -->
+	<!-- ############################################### -->
+	<!-- ############################################### -->
+	
     <target name="display.commands">
     	<echo>
     		Menu :
@@ -10,10 +20,17 @@
     		ant commands : 
     		--------------------------
     		[ant commit] (adds all files to repository, and commits them)
+    		
     		[ant tests] (executes all files with the naming convention tests)
+    		
     		[ant origin] (adds all files, commit's all files, pushes to the origin master )
-    		[ant test-and-push](tests all files, adds all untract files, and pushes to the origin, creates analytics from previous builds)
-    		[ant analysis](creates analytics from all previous builds)
+    		
+    		[ant test-and-push](tests all files, adds all untract files, and pushes 
+    		to the origin, creates analytics from previous builds)
+    		
+			[ant coverage] just runs the analytics
+    		
+    		[ant analyze](creates analytics from all previous builds, runs pylint)
     	</echo>
     </target>		
 	
@@ -26,33 +43,51 @@
 		and automate emails for everyone on the build list...
 	-->
 	
-	
-	
 	<!-- needs to pull, if other developers are using this repository! -->
+	
 	<!-- currently doesn't pull anything-->
-    <target name="commit">
+    
+	<target name="commit">
     	<antcall target="git-commit-changes" />    	
 	</target>
-    <target name="tests">
+    
+	<target name="tests">
     	 <antcall target="create_file_system" />
     	 <antcall target="run.all.tests" />	
 	</target>
+	
 	<target name="origin">
 	    	 <antcall target="git-push-to-origin" />
 	</target>
+	
+	
 	<target name="test-and-push">
    	 	<antcall target="create_file_system" />
    	 	<antcall target="run.all.tests" />
    	    <antcall target="git-push-to-origin" />
 		<antcall target="create_html_output" />
 	</target>
-	<!-- will only analyze existing builds... -->
-	<target name="analysis">
+	
+	<!-- will only analyze exithe targets executed per existing builds... -->
+	
+	
+	<target name="analyze">
+		<!-- pylint is a python code analysis tool, to help produce better code -->
+		<antcall target="create_file_system" />
+		<antcall target="pylint.run.all.code" />
 		<antcall target="create_html_output" />
 	</target>
-
 	
 	
+	
+	<!-- ############################################### -->
+	<!-- ############################################### -->
+	<!-- ##                                           ## -->
+	<!-- ##           Ant Path References             ## -->
+	<!-- ##  (So we are able to adaptably use ant)    ## -->		
+	<!-- ##                                           ## -->
+	<!-- ############################################### -->
+	<!-- ############################################### -->
 	
 	
 	
@@ -61,7 +96,12 @@
 	<!-- allows for antcontrib references (like try catch...)-->
 	<!-- [http://ant-contrib.sourceforge.net/tasks/tasks/] -->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-		
+	
+	
+	
+	
+	
+	
 	<!-- utilities -->
 	
 	<!-- ############################################### -->
@@ -171,7 +211,7 @@
 							<git command="commit">
 								<args>
 									<arg value="-m" />
-									<arg value="'BUILD NO. [@{time.stamp}]'" />
+									<arg value="'Commit from ant'" />
 								</args>
 							</git>
 						</try>
@@ -261,6 +301,8 @@
 								<!-- files -->				
 									<!-- tests executed & results -->
 										<property name="test.log.file" value="${test.dir}/test_transactions.txt"/>
+									<!-- code coverage -->
+										<property name="coverage.log.file" value="${test.dir}/coverage_output.html" />
 									<!-- end // tests executed & results -->
 								<!-- end // files -->
 							<!-- end // tests -->
@@ -349,21 +391,31 @@
 					<touch file="${error.log.file}" datetime="now"/>
 		
 						<!-- test.dir -->
+						
 								<!-- logs all the targets executed per build -->
-								<touch file="${target.log.file}" datetime="now"/>
+								<touch file="${test.log.file}" datetime="now"/>
+						
 						<!-- end // test.dir -->
 						
 						<!-- repository.dir -->
+						
 								<!-- logs all the targets executed per build -->
 								<touch file="${repository.log.file}" datetime="now"/>
+						
 						<!-- end // repository.dir -->
 						
 						<!-- html.dir -->
+								
 								<!-- logs all the targets executed per build -->
 								<touch file="${html.log.file}" datetime="now"/>
+								
+								<!-- logs all the code coverage per build -->
+								<touch file="${coverage.log.file}" datetime="now"/>
+
 						<!-- end // html.dir -->
 		
 				<!-- end // build.dir -->
+		
 		<!-- end // log.dir -->
 	</target>
 	
@@ -421,7 +473,131 @@
 	<property name="optimize.setting" value="0"/>
 					
 	<target name="compile">
-		<!--<py-compile dir="${broker.logic}" pythonpath="." optimize="0"/>-->
+		
+		
+	</target>
+	<!-- ############################################### -->
+	<!-- ############################################### -->
+	<!-- ##                                           ## -->
+	<!-- ##            Runs All Unit Tests            ## -->
+	<!-- ##                                           ## -->
+	<!-- ############################################### -->
+	<!-- ############################################### -->
+
+	<target name="run.all.tests" depends="compile">
+		<!-- records all output to  -->
+		<record name="${test.log.file}" action="start"/>
+		<foreach target="individual.test" param="individual.test.file">
+	       <fileset id="test.files" dir="${src.dir}">
+	            <include name="**/*tests*" />
+	       </fileset>
+		</foreach>
+		<record name="${test.log.file}" action="stop"/>
+	</target>
+	
+	<!-- processes and runs individual tests -->
+	
+	<target name="individual.test">  	
+		<py-run script="${individual.test.file}" pythonpath="${src.dir}" optimize="${optimize.setting}" />
+	</target>
+	
+	<!--Python Code Coverage [Pylint] -->
+	<!-- ############################################### -->
+	<!-- ############################################### -->
+	<!-- ##                                           ## -->
+	<!-- ## Runs Pylint, Code Coverage/Analysis Tool  ## -->
+	<!-- ##                                           ## -->
+	<!-- ############################################### -->
+	<!-- ############################################### -->
+
+
+	<target name="pylint.run.all.code">
+		<!-- Records all output to log -->
+		<record name="${coverage.log.file}" action="start"/>
+		
+		<echo>Pylint Code Coverage Analysis</echo>
+		
+		<foreach target="individual.pylint.test" param="individual.pylint.test.file">
+	       <fileset id="test.files" dir="${src.dir}">
+	       		<filename regex="^((?!__).)*((?!test).)*.py$"/>
+	       </fileset>
+		</foreach>
+		<record name="${coverage.log.file}" action="stop"/>
+	</target>
+		
+	<!-- processes and runs individual pylint tests -->
+	
+	<target name="individual.pylint.test">
+			<echo message="${individual.pylint.test.file}" />
+					
+			<exec executable="pylint">
+		        <arg line="${individual.pylint.test.file}"/>
+		    </exec>
+	</target>
+	
+</project>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<py-compile dir="${broker.logic}" pythonpath="." optimize="0"/>-->
 		<!--
 		<py-run script="broker/logic/logic_tests.py" pythonpath="${src.dir}" optimize="${optimize.setting}" />
 		<py-run script="broker/broker_tests.py" pythonpath="${src.dir}" optimize="${optimize.setting}" />	      	
@@ -438,21 +614,3 @@
 		prints out everything in a file set to the screen
 		<echo message="My build-path is ${toString:test.files}" />	
 		-->
-	</target>
-
-	<target name="run.all.tests" depends="compile">
-		
-		<foreach target="individual.test" param="individual.test.file">
-	       <fileset id="test.files" dir="${src.dir}">
-	            <include name="**/*tests*" />
-	       </fileset>
-		</foreach>
-		
-	</target>
-	<target name="individual.test">
-		<record name="log.txt" action="start"/>  	
-			<py-run script="${individual.test.file}" pythonpath="${src.dir}" optimize="${optimize.setting}" />
-		<record name="log.txt" action="stop"/>
-	</target>
-	
-</project>

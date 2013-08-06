@@ -1,0 +1,251 @@
+  [foreach] The nested fileset element is deprectated, use a nested path instead
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] 
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 0 tests in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] .
+   [py-run] Running main tests
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] .
+   [py-run] Running main tests
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] 
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 0 tests in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] Running broker.logic tests
+   [py-run] .
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] .
+   [py-run] Running broker.logic tests
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] .
+   [py-run] Running analyze tests
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] .
+   [py-run] Running google finance tests
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] Running google finance tests
+   [py-run] .
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] .
+   [py-run] Running scrapers tests
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] Running scrapers tests
+   [py-run] .
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] Running yahoo finance tests
+   [py-run] .
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] Running yahoo finance tests
+   [py-run] .
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] .
+   [py-run] Running data tests
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] .
+   [py-run] Running data tests
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] Running google finance tests
+   [py-run] .
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] Running database tests
+   [py-run] .
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] .
+   [py-run] Running database tests
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] .
+   [py-run] Running models tests
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] .
+   [py-run] Running models tests
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] Running logic tests
+   [py-run] .
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] Running logic tests
+   [py-run] .
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] .
+   [py-run] Running machine learning tests
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] Running machine learning tests
+   [py-run] .
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] Running setup tests
+   [py-run] .
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] Running setup tests
+   [py-run] .
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] .
+   [py-run] Running data tests
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK
+
+individual.test:
+pythonpath: /home/justin/Desktop/Stocks/Strategy
+   [py-run] .
+   [py-run] Running data tests
+   [py-run] ----------------------------------------------------------------------
+   [py-run] Ran 1 test in 0.000s
+   [py-run] 
+   [py-run] OK

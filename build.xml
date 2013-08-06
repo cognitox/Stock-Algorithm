@@ -187,7 +187,7 @@
 						<try>
 							<git command="add">	
 								<args>
-									<arg value="-A" />
+									<arg value="." />
 								</args>
 							</git>
 						</try>
